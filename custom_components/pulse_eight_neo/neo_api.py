@@ -1,50 +1,56 @@
 import logging
-from typing import Optional, Tuple
-
 from aiohttp import ClientSession, ClientTimeout
 
 _LOGGER = logging.getLogger(__name__)
 
 class NeoMatrix:
     """
-    Pulse-Eight Neo HTTP API (as confirmed by user):
-      http://<host>/Port/Set/<INPUT>/<OUTPUT>
+    Pulse-Eight Neo HTTP API
 
-    Where INPUT and OUTPUT are zero-indexed.
-    Example:
-      /Port/Set/0/3  => input 1 to output 4
+    Routing:
+        /Port/Set/<INPUT>/<OUTPUT>
+
+    CEC:
+        /CEC/On/<OUTPUT>
+        /CEC/Off/<OUTPUT>
+
+    All zero indexed.
     """
 
     def __init__(self, host: str, session: ClientSession):
         self.host = host
         self.session = session
+        self.timeout = ClientTimeout(total=4)
 
-    async def route(self, output_1based: int, input_1based: int) -> Tuple[Optional[int], str]:
-        # Convert to zero-based for Neo API
-        out0 = int(output_1based) - 1
-        in0 = int(input_1based) - 1
-
-        path = f"/Port/Set/{in0}/{out0}"
+    async def _get(self, path):
         url = f"http://{self.host}{path}"
-
         headers = {
             "Host": self.host,
             "Connection": "close",
-            "User-Agent": "HomeAssistant-PulseEightNeo/2.1.0",
-            "Accept": "*/*",
+            "User-Agent": "HomeAssistant-PulseEightNeo",
+            "Accept": "*/*"
         }
 
-        _LOGGER.warning("Neo request -> %s", url)
+        _LOGGER.warning("Neo -> %s", url)
 
         try:
-            timeout = ClientTimeout(total=4)
-            async with self.session.get(url, headers=headers, timeout=timeout) as resp:
+            async with self.session.get(url, headers=headers, timeout=self.timeout) as resp:
                 body = await resp.text(errors="ignore")
-                _LOGGER.warning("Neo response <- %s (%s bytes)", resp.status, len(body))
-                if body:
-                    # Log only first 200 chars to avoid spam
-                    _LOGGER.debug("Neo body (first 200): %s", body[:200])
+                _LOGGER.warning("Neo <- %s (%s bytes)", resp.status, len(body))
                 return resp.status, body
         except Exception as e:
-            _LOGGER.error("Neo HTTP error talking to %s: %s", self.host, e)
+            _LOGGER.error("Neo HTTP error: %s", e)
             return None, str(e)
+
+    async def route(self, output_1based: int, input_1based: int):
+        out0 = int(output_1based) - 1
+        in0 = int(input_1based) - 1
+        return await self._get(f"/Port/Set/{in0}/{out0}")
+
+    async def power_on(self, output_1based: int):
+        out0 = int(output_1based) - 1
+        return await self._get(f"/CEC/On/{out0}")
+
+    async def power_off(self, output_1based: int):
+        out0 = int(output_1based) - 1
+        return await self._get(f"/CEC/Off/{out0}")
