@@ -1,6 +1,7 @@
 from homeassistant import config_entries
 import voluptuous as vol
-from .const import *
+
+from .const import DOMAIN, CONF_HOST, CONF_OUTPUTS, DEFAULT_OUTPUTS
 
 class NeoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
