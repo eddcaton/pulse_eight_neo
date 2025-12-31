@@ -1,7 +1,7 @@
 {
   "domain": "pulse_eight_neo",
   "name": "Pulse-Eight Neo Matrix",
-  "version": "2.0.0",
+  "version": "2.0.3",
   "documentation": "https://github.com/eddcaton/pulse_eight_neo",
   "requirements": [],
   "dependencies": [],
