@@ -1,10 +1,22 @@
 route:
   name: Route
-  description: Route an input to an output (Neo API uses /Port/Set/<INPUT>/<OUTPUT>)
+  description: Route an input to an output
   fields:
     output:
       required: true
-      example: 4
     input:
       required: true
-      example: 1
+
+power_on:
+  name: Power On TV
+  description: Turn on TV via Neo CEC
+  fields:
+    output:
+      required: true
+
+power_off:
+  name: Power Off TV
+  description: Turn off TV via Neo CEC
+  fields:
+    output:
+      required: true
