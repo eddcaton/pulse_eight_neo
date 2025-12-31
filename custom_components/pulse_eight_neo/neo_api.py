@@ -1,5 +1,5 @@
-import logging
 import http.client
+import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -8,20 +8,21 @@ class NeoMatrix:
         self.host = host
 
     def route(self, output, input):
-        # Convert to zero-based
+        # Neo API is zero-indexed and is INPUT first, OUTPUT second
         out = int(output) - 1
         inp = int(input) - 1
 
-        path = f"/Port/Set/{out}/{inp}"
+        path = f"/Port/Set/{inp}/{out}"
         _LOGGER.warning(f"Neo HTTP -> http://{self.host}{path}")
 
         try:
-            conn = http.client.HTTPConnection(self.host, timeout=3)
+            conn = http.client.HTTPConnection(self.host, 80, timeout=3)
             conn.request("GET", path)
-            response = conn.getresponse()
-            response.read()
+            resp = conn.getresponse()
+            resp.read()
             conn.close()
-            return response.status
+            _LOGGER.warning(f"Neo response: {resp.status}")
+            return resp.status
         except Exception as e:
             _LOGGER.error(f"Neo HTTP error: {e}")
             return None
