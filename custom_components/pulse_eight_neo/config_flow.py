@@ -1,13 +1,12 @@
 from homeassistant import config_entries
 import voluptuous as vol
-
 from .const import DOMAIN, CONF_HOST, CONF_OUTPUTS, DEFAULT_OUTPUTS
 
 class NeoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     async def async_step_user(self, user_input=None):
-        if user_input is not None:
+        if user_input:
             return self.async_create_entry(
                 title=f"Pulse-Eight Neo ({user_input[CONF_HOST]})",
                 data=user_input
