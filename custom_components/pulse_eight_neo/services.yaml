@@ -1,8 +1,10 @@
 route:
   name: Route
-  description: Route input to output
+  description: Route an input to an output (Neo API uses /Port/Set/<INPUT>/<OUTPUT>)
   fields:
     output:
       required: true
+      example: 4
     input:
       required: true
+      example: 1
