@@ -1,0 +1,14 @@
+route:
+  name: Route
+  description: Route input to output
+  fields:
+    output:
+      required: true
+    input:
+      required: true
+
+power_on:
+  name: Power On Output
+
+power_off:
+  name: Power Off Output
