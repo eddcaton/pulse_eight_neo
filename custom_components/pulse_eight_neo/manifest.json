@@ -1,10 +1,11 @@
 {
   "domain": "pulse_eight_neo",
   "name": "Pulse-Eight Neo Matrix",
-  "version": "1.0.0",
-  "documentation": "https://github.com/YOURNAME/pulse_eight_neo",
+  "version": "1.0.1",
+  "documentation": "https://github.com/eddcaton/pulse_eight_neo",
   "requirements": [],
-  "codeowners": ["@yourgithub"],
+  "dependencies": [],
+  "codeowners": ["@eddcaton"],
   "config_flow": true,
   "iot_class": "local_push"
 }
