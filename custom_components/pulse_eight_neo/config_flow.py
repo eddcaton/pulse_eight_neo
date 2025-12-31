@@ -16,7 +16,6 @@ class NeoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=vol.Schema({
                 vol.Required(CONF_HOST): str,
-                vol.Required(CONF_PORT, default=DEFAULT_PORT): int,
                 vol.Required(CONF_OUTPUTS, default=DEFAULT_OUTPUTS): int
             })
         )
